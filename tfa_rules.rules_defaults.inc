@@ -16,7 +16,15 @@ function tfa_rules_default_rules_configuration() {
     "OWNER" : "rules",
     "REQUIRES" : [ "tfa_rules", "rules" ],
     "ON" : { "user_login" : [] },
-    "IF" : [ { "NOT tfa_rules_user_has_tfa" : { "account" : [ "account" ] } } ],
+    "IF" : [
+      { "NOT tfa_rules_user_has_tfa" : { "account" : [ "account" ] } },
+      { "NOT text_matches" : {
+          "text" : [ "site:current-page:path" ],
+          "match" : "user\/reset",
+          "operation" : "starts"
+        }
+      }
+    ],
     "DO" : [
       { "drupal_message" : {
           "message" : "Two-factor authentication (TFA) is strongly recommended; please configure your account security.",
